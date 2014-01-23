@@ -24,10 +24,17 @@ func TestZlib(t *testing.T) {
 	// io.Copy(os.Stdout, r)
 	// r.Close()
 
-	var input = []byte("Your Hero Game")
+	var input = []byte("kobe system")
 	fmt.Println("原始数据", input)
 	test, _ := Compress(input)
 	fmt.Println("压缩数据", test)
+	fix := test
+	fix[2] += 1
+	fix = fix[0 : len(fix)-9]
+	fix = append(fix, 0, 0, 0, 0, 0)
+	fmt.Println(fix)
+	copy(fix[len(fix)-4:], test[len(test)-4:])
+	fmt.Println("调整数据", fix)
 	test, _ = Decompress(test)
 	fmt.Println("解压数据", test)
 

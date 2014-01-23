@@ -11,7 +11,7 @@ type Pipe struct {
 }
 
 func NewPipe() *Pipe {
-	fmt.Println("create a pipe")
+	fmt.Println("Pipe>>> create a pipe")
 	return &Pipe{
 		Decoder: NewDecoder(),
 		Handler: NewHandler(),
@@ -19,9 +19,13 @@ func NewPipe() *Pipe {
 	}
 }
 
-func (p *Pipe) Handle(buf []byte) {
+func (p *Pipe) Handle(buf []byte) []byte {
 	data := p.Decoder.Decode(buf)
+	fmt.Println("Pipe>>> decode success")
 	response := p.Handler.Handle(data)
-	p.Encoder.Encode(response)
+	fmt.Println("Pipe>>> handle success")
+	out := p.Encoder.Encode(response)
+	fmt.Println("Pipe>>> encode success")
 
+	return out
 }

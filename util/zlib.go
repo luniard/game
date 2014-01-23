@@ -8,8 +8,10 @@ import (
 
 func Compress(data []byte) ([]byte, error) {
 	var buf bytes.Buffer
-	// compressor, err := zlib.NewWriterLevelDict(&buf, zlib.DefaultCompression, data)
-	compressor := zlib.NewWriter(&buf)
+	// t := []byte{0, 1}
+	compressor, _ := zlib.NewWriterLevelDict(&buf, -1, nil)
+	// compressor, _ := zlib.NewWriterLevelDict(&buf, zlib.DefaultCompression, data)
+	// compressor := zlib.NewWriter(&buf)
 	// defer compressor.Close()
 	// if err != nil {
 	// 	return nil, err

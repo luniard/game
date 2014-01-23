@@ -1,4 +1,5 @@
 package message
 
-type Request struct {
+type Request interface {
+	Decode(b []byte) interface{}
 }

@@ -40,11 +40,13 @@ func EchoServer(conn net.Conn) {
 	defer conn.Close()
 
 	for {
-		n, err := conn.Read(buf)
+		_, err := conn.Read(buf)
 		switch err {
 		case nil:
-			Pipeline.Handle(buf)
-			conn.Write(buf[0:n])
+			data := Pipeline.Handle(buf)
+			// conn.Write(buf[0:n])
+			// fmt.Println("send to client", data)
+			conn.Write(data)
 		case io.EOF:
 			fmt.Printf("Warning: End of data: %s \n", err)
 			return

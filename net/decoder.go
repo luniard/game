@@ -25,7 +25,7 @@ type Decoder struct {
 
 func (decoder *Decoder) Decode(b []byte) interface{} {
 	fmt.Println("decode")
-	fmt.Println(b)
+	// fmt.Println(b)
 	if len(b) < 22 {
 		return nil
 	}
@@ -47,42 +47,76 @@ func (decoder *Decoder) Decode(b []byte) interface{} {
 	var version int8
 	// binary.Read(buf, binary.LittleEndian, &version)
 	readBuf(buf, &version)
-	fmt.Println(version)
+	fmt.Println("version", version)
 
 	var srcId uint16
 	readBuf(buf, &srcId)
-	fmt.Println(srcId)
+	fmt.Println("srcid", srcId)
 
 	var dstId uint16
 	readBuf(buf, &dstId)
-	fmt.Println(dstId)
+	fmt.Println("dstid", dstId)
 
 	var flag uint32
 	var bodylen int16
 
 	readBuf(buf, &flag)
 	readBuf(buf, &bodylen)
-	fmt.Println("bodylen ", bodylen)
+	// fmt.Println("bodylen ", bodylen)
 	if buf.Len() < int(bodylen) {
 		return nil
 	}
 	body := make([]byte, bodylen)
 	readBuf(buf, &body)
-	fmt.Println(body)
+	// fmt.Println(body)
 	if (flag & MASK_ENCRYPT) == MASK_ENCRYPT {
-		fmt.Println("MASK_ENCRYPT")
-		body = util.Encrypt32(body, ENCRYPT_KEY)
+		body = util.Decrypt32(body, ENCRYPT_KEY)
+		// fmt.Println("MASK_ENCRYPT")
+		// fmt.Println(body)
 	}
 
 	if (flag & MASK_COMPRESS) == MASK_COMPRESS {
-		fmt.Println("MASK_COMPRESS")
 		body, _ = util.Decompress(body)
+		// fmt.Println("MASK_COMPRESS")
+		// fmt.Println(body)
 	}
 
-	var req message.Request
+	buf = bytes.NewBuffer(body)
+	var seqNum uint32
+	readBuf(buf, &seqNum)
+	fmt.Println("seqNum", seqNum)
 
-	return req
+	var msgCode uint32
+	readBuf(buf, &msgCode)
+	fmt.Println("msgCode", msgCode)
 
+	header := message.MessageHeader{version, srcId, dstId,
+		seqNum, msgCode, ""}
+
+	messageBody := body[8:]
+	// fmt.Println(messageBody)
+
+	// var req message.Request
+	// return req
+
+	// if msgCode == 0x1001 {
+	// 	fmt.Println("get here")
+	// 	req := message.UARequest{}
+	// 	req.Message = message.Message{header, messageBody}
+	// 	req.Decode()
+	// 	return req
+	// } else if msgCode == 0x1005 {
+	// 	fmt.Println("get here")
+	// 	req := message.UARequest{}
+	// 	req.Decode()
+	// 	return req
+	// } else {
+	// 	// return message.ProxiedRequest{header, messageBody}
+	// 	return message.Message{header, messageBody}
+	// }
+
+	fmt.Println("header msgcode", header.MsgCode)
+	return message.Message{header, messageBody}
 }
 
 func NewDecoder() *Decoder {
