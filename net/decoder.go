@@ -24,13 +24,13 @@ type Decoder struct {
 }
 
 func (decoder *Decoder) Decode(b []byte) interface{} {
-	fmt.Println("decode")
+	// fmt.Println("decode")
 	// fmt.Println(b)
 	if len(b) < 22 {
 		return nil
 	}
 
-	fmt.Println("read magic number")
+	// fmt.Println("read magic number")
 	magic := b[0:22]
 
 	if string(magic) == flash_policy {
@@ -47,15 +47,15 @@ func (decoder *Decoder) Decode(b []byte) interface{} {
 	var version int8
 	// binary.Read(buf, binary.LittleEndian, &version)
 	readBuf(buf, &version)
-	fmt.Println("version", version)
+	// fmt.Println("version", version)
 
 	var srcId uint16
 	readBuf(buf, &srcId)
-	fmt.Println("srcid", srcId)
+	// fmt.Println("srcid", srcId)
 
 	var dstId uint16
 	readBuf(buf, &dstId)
-	fmt.Println("dstid", dstId)
+	// fmt.Println("dstid", dstId)
 
 	var flag uint32
 	var bodylen int16
@@ -88,7 +88,7 @@ func (decoder *Decoder) Decode(b []byte) interface{} {
 
 	var msgCode uint32
 	readBuf(buf, &msgCode)
-	fmt.Println("msgCode", msgCode)
+	fmt.Printf("msgCode %x\n", msgCode)
 
 	header := message.MessageHeader{version, srcId, dstId,
 		seqNum, msgCode, ""}
@@ -115,7 +115,7 @@ func (decoder *Decoder) Decode(b []byte) interface{} {
 	// 	return message.Message{header, messageBody}
 	// }
 
-	fmt.Println("header msgcode", header.MsgCode)
+	// fmt.Println("header msgcode", header.MsgCode)
 	return message.Message{MessageHeader: header, Body: messageBody}
 }
 

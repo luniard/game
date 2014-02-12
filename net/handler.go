@@ -6,28 +6,21 @@ import (
 	"fmt"
 	"io"
 
-	message "github.com/luniard/game/net/message"
+	"github.com/luniard/game/handler"
+	"github.com/luniard/game/net/message"
 )
 
 type Handler struct {
 }
 
-type handler func(msg message.Message) message.Message
-
-var Handlers map[uint32]handler
-
-func init() {
-	Handlers = make(map[uint32]handler)
-}
-
 func (hanlder *Handler) Handle(data interface{}) interface{} {
-	fmt.Println("handle..")
+	// fmt.Println("handle..")
 
 	if msg, ok := data.(message.Message); ok {
-		println(msg.MessageHeader.MsgCode)
+		// println(msg.MessageHeader.MsgCode)
 		if msg.MessageHeader.MsgCode == 0x1001 {
 			authCode := makeSessionId()
-			fmt.Println("generate authCode", authCode)
+			fmt.Println(">>> generate authCode", authCode)
 
 			resp := message.UAResponse{}
 			resp.AuthCode = authCode
@@ -36,8 +29,8 @@ func (hanlder *Handler) Handle(data interface{}) interface{} {
 			resp.Encode()
 			return resp.Message
 		} else {
-			fmt.Println(Handlers)
-			f := Handlers[msg.MessageHeader.MsgCode]
+			// fmt.Println(handler.Handlers)
+			f := handler.Handlers[msg.MessageHeader.MsgCode]
 			return f(msg)
 		}
 	}

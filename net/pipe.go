@@ -21,11 +21,11 @@ func NewPipe() *Pipe {
 
 func (p *Pipe) Handle(buf []byte) []byte {
 	data := p.Decoder.Decode(buf)
-	fmt.Println("Pipe>>> decode success")
+	// fmt.Println("Pipe>>> decode success")
 	response := p.Handler.Handle(data)
-	fmt.Println("Pipe>>> handle success")
+	// fmt.Println("Pipe>>> handle success")
 	out := p.Encoder.Encode(response)
-	fmt.Println("Pipe>>> encode success")
+	// fmt.Println("Pipe>>> encode success")
 
 	return out
 }

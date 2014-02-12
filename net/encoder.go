@@ -3,7 +3,7 @@ package net
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
+	// "fmt"
 	"io"
 
 	"github.com/luniard/game/net/message"
@@ -14,7 +14,7 @@ type Encoder struct {
 }
 
 func (encoder *Encoder) Encode(data interface{}) []byte {
-	fmt.Println("encode")
+	// fmt.Println("encode")
 	// response := []byte{}
 
 	buf := bytes.NewBuffer([]byte{})

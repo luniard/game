@@ -1,4 +1,4 @@
-package net
+package handler
 
 import (
 	"fmt"
@@ -11,7 +11,6 @@ func init() {
 }
 
 func handleShop(msg message.Message) message.Message {
-	fmt.Println("get shop request")
 	req := message.ShopRequest{}
 	req.Message = msg
 	req.Decode()
@@ -21,6 +20,6 @@ func handleShop(msg message.Message) message.Message {
 	resp.Message.MessageHeader = msg.MessageHeader
 	resp.Message.MessageHeader.MsgCode += 1
 	resp.Encode()
-	fmt.Println("send shop response")
+	fmt.Println("ShopHandler>>> shop handled")
 	return resp.Message
 }

@@ -2,7 +2,7 @@ package message
 
 import (
 	"encoding/json"
-	"fmt"
+	// "fmt"
 )
 
 var (
@@ -37,40 +37,8 @@ type EncodeResponseI interface {
 	EncodeJson(m map[string]interface{}) []byte
 }
 
-// type ProxiedRequest struct {
-// 	Message
-// }
-
-// type ProxiedResponse struct {
-// 	Message
-// }
-
-// func (p *ProxiedRequest) GetHeader() MessageHeader {
-// 	return p.Header
-// }
-// func (p *ProxiedRequest) GetBody() []byte {
-// 	return p.Body
-// }
-
-// func (p *ProxiedResponse) GetHeader() MessageHeader {
-// 	return p.Header
-// }
-// func (p *ProxiedResponse) GetBody() []byte {
-// 	return p.Body
-// }
-
-// type DecodeRequest struct {
-// 	// header MessageHeader
-// 	Body []byte
-// }
-
-// func (d *DecodeRequest) Decode() {
-
-// 	d.DecodeBody(objmap)
-// }
-
 func (msg *Message) DecodeBody() map[string]*json.RawMessage {
-	fmt.Println("decode body")
+	// fmt.Println("decode body")
 	var objmap map[string]*json.RawMessage
 	// fmt.Println("body", d.Body)
 	json.Unmarshal(msg.Body, &objmap)
@@ -79,7 +47,7 @@ func (msg *Message) DecodeBody() map[string]*json.RawMessage {
 }
 
 func (msg *Message) EncodeJson(m map[string]interface{}) []byte {
-	fmt.Println("encode body")
+	// fmt.Println("encode body")
 
 	// fmt.Println("body", d.Body)
 	m["msg"] = msg.msg
