@@ -12,40 +12,22 @@ import (
 type Handler struct {
 }
 
+type handler func(msg message.Message) message.Message
+
+var Handlers map[uint32]handler
+
+func init() {
+	Handlers = make(map[uint32]handler)
+}
+
 func (hanlder *Handler) Handle(data interface{}) interface{} {
 	fmt.Println("handle..")
-
-	// switch request := data.(type) {
-	// case message.UARequest:
-	// 	fmt.Println("get ua request...", request)
-	// 	fmt.Println("TEST PASS UA")
-	// 	authCode := makeSessionId()
-	// 	fmt.Println("authCode", authCode)
-
-	// 	resp := message.UAResponse{}
-	// 	resp.AuthCode = authCode
-	// 	resp.Message.MessageHeader = request.Message.MessageHeader
-	// 	fmt.Println("resp--0", resp)
-	// 	resp.Encode()
-	// 	fmt.Println("resp--1", resp)
-	// 	return resp
-
-	// }
-
-	// fmt.Println("common resp")
-	// var resp message.Response
 
 	if msg, ok := data.(message.Message); ok {
 		println(msg.MessageHeader.MsgCode)
 		if msg.MessageHeader.MsgCode == 0x1001 {
-			//todo module
-			// fmt.Println("get here")
 			authCode := makeSessionId()
-			// authCode := "wahaha"
 			fmt.Println("generate authCode", authCode)
-			// req := message.UARequest{}
-			// req.Message = message.Message{header, messageBody}
-			// req.Decode()
 
 			resp := message.UAResponse{}
 			resp.AuthCode = authCode
@@ -53,6 +35,10 @@ func (hanlder *Handler) Handle(data interface{}) interface{} {
 			resp.Message.MessageHeader.MsgCode += 1
 			resp.Encode()
 			return resp.Message
+		} else {
+			fmt.Println(Handlers)
+			f := Handlers[msg.MessageHeader.MsgCode]
+			return f(msg)
 		}
 	}
 

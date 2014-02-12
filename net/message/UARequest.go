@@ -20,3 +20,7 @@ func (u *UARequest) Decode() {
 	// json.Unmarshal(*(m["authcode"]), &u.authCode)
 	fmt.Println(u.userName)
 }
+
+func (u *UARequest) GetMsgCode() int32 {
+	return 0x1001
+}

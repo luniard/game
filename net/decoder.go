@@ -116,7 +116,7 @@ func (decoder *Decoder) Decode(b []byte) interface{} {
 	// }
 
 	fmt.Println("header msgcode", header.MsgCode)
-	return message.Message{header, messageBody}
+	return message.Message{MessageHeader: header, Body: messageBody}
 }
 
 func NewDecoder() *Decoder {

@@ -12,16 +12,21 @@ var (
 type Message struct {
 	MessageHeader
 	Body []byte
+	msg  string //返回客户端的消息
+	code int    //返回客户端的消息码
 }
 
 type Decode interface {
 	// Message
 	Decode()
-	GetMsgCode() uint32
 }
 
 type Encode interface {
 	Encode()
+}
+
+type MsgCode interface {
+	GetMsgCode() uint32
 }
 
 type DecodeRequestI interface {
@@ -77,6 +82,8 @@ func (msg *Message) EncodeJson(m map[string]interface{}) []byte {
 	fmt.Println("encode body")
 
 	// fmt.Println("body", d.Body)
+	m["msg"] = msg.msg
+	m["code"] = msg.code
 	data, _ := json.Marshal(m)
 	// fmt.Println("json unmarshal", objmap)
 	return data
