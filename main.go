@@ -5,6 +5,8 @@ import (
 	"io"
 	"net"
 
+	"github.com/astaxie/beego/orm"
+	_ "github.com/lib/pq"
 	gamenet "github.com/luniard/game/net"
 )
 
@@ -15,6 +17,9 @@ var (
 )
 
 func init() {
+
+	orm.RegisterDataBase("default", "postgres", "user=wap password=wap host=172.16.3.216 port=1921 dbname=ugg_test sslmode=disable")
+
 	Pipeline = gamenet.NewPipe()
 }
 

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"github.com/luniard/game/model"
 	"github.com/luniard/game/net/message"
 )
 
@@ -14,6 +15,8 @@ func handleShop(msg message.Message) message.Message {
 	req := message.ShopRequest{}
 	req.Message = msg
 	req.Decode()
+
+	model.AddShop("test1", "test2")
 
 	resp := message.ShopResponse{}
 	// resp.AuthCode = authCode
